@@ -1,0 +1,136 @@
+# README
+
+## Project Title: Quadtree Image Compression and Decompression
+
+### Author: Vasilică Andrei
+
+### Overview
+
+This project implements a quadtree-based image compression and decompression system. It processes PPM (Portable Pixmap) image files to reduce their size using quadtree compression and can later decompress them back into their original form. The project includes multiple tasks that demonstrate the compression and decompression processes.
+
+### Structure Definitions
+
+1. **QuadtreeNode**:
+    - Represents a node in the quadtree.
+    - Fields:
+        - `blue, green, red`: RGB color values of a pixel.
+        - `area`: The area covered by the node.
+        - `node_type`: Indicates if the node is terminal (leaf) or non-terminal.
+        - `top_left, top_right, bottom_left, bottom_right`: Indices of the child nodes.
+
+2. **Node**:
+    - A more usable representation of a quadtree node.
+    - Fields:
+        - `blue, green, red`: RGB color values of a pixel.
+        - `area`: The area covered by the node.
+        - `node_type`: Indicates if the node is terminal or non-terminal.
+        - `poz`: Position of the node in the compression vector.
+        - Pointers to child nodes: `top_left, top_right, bottom_left, bottom_right`.
+
+3. **RGB**:
+    - Represents the RGB color values of a pixel.
+    - Fields:
+        - `red, green, blue`: Color values.
+
+4. **ImageRGB**:
+    - Represents a PPM image.
+    - Fields:
+        - `tip`: Type of the PPM image (e.g., "P6").
+        - `width, height`: Dimensions of the image.
+        - `factor`: Compression factor.
+        - `data`: A matrix of RGB structures representing the image data.
+
+### Function Descriptions
+
+- **max(int a, int b)**:
+    - Returns the maximum of two integers.
+
+- **min(int a, int b)**:
+    - Returns the minimum of two integers.
+
+- **initQCell(Node *elem)**:
+    - Initializes a queue cell with the given node.
+
+- **initQ()**:
+    - Initializes an empty queue.
+
+- **emptyQ(queue *q)**:
+    - Checks if the queue is empty.
+
+- **popQ(queue *q)**:
+    - Removes the front element from the queue.
+
+- **addQ(queue *q, Node *elem)**:
+    - Adds a node to the queue.
+
+- **read_image(char *image_file, char *image_factor)**:
+    - Reads a PPM image file and returns the image data.
+
+- **mean_calc(ImageRGB *image, unsigned long long int *mean, int x, int y, int size)**:
+    - Calculates the average color values and the mean for a given block of pixels.
+
+- **quadtree(ImageRGB *image, int x, int y, int size, int *nr_nod, int *colors)**:
+    - Recursively creates the quadtree for the image.
+
+- **hasChildren(Node *node)**:
+    - Checks if a node has children.
+
+- **fill_qt(Node *nod, QuadtreeNode *tree)**:
+    - Fills a QuadtreeNode with data from a Node.
+
+- **bfs(Node *nod, int nr_nod)**:
+    - Performs a breadth-first search to create the compression vector.
+
+- **print_compress(QuadtreeNode *tree, int nr_nod, int colors, char *compress_file)**:
+    - Prints the compression vector to a file.
+
+- **freeNode(Node *nod)**:
+    - Frees the memory allocated for a node and its children.
+
+- **decompress(Node **root, queue *q, FILE *f)**:
+    - Decompresses a quadtree from a file.
+
+- **depth(Node *nod)**:
+    - Calculates the depth of the quadtree.
+
+- **find_max_uniform_area(QuadtreeNode *tree, int nr_nod)**:
+    - Finds the maximum area of uniform color in the quadtree.
+
+- **create_matrix(Node *nod, RGB ***colors, int x, int y, int size)**:
+    - Creates a matrix for the decompressed image data.
+
+### Tasks
+
+- **task1(char *image_file, char *compress_file, char *image_factor)**:
+    - Reads a PPM image, compresses it using a quadtree, and writes the results to a file.
+
+- **task2(char *image_file, char *compress_file, char *image_factor)**:
+    - Reads a PPM image, compresses it using a quadtree, and prints the compression vector to a file.
+
+- **task3(char *compress_file, char *image_file)**:
+    - Decompresses an image from a file containing a quadtree and writes it to a PPM file.
+
+### Usage
+
+- To compress an image and get the compression statistics:
+  ```sh
+  ./program -c1 <compression_factor> <image_file> <compress_file>
+  ```
+
+- To compress an image and get the compression vector:
+  ```sh
+  ./program -c2 <compression_factor> <image_file> <compress_file>
+  ```
+
+- To decompress an image:
+  ```sh
+  ./program -d <compress_file> <output_image_file>
+  ```
+
+### Notes
+
+- Ensure the PPM image files are in the correct format.
+- The compression factor determines the sensitivity of the compression process.
+- The program handles memory allocation and deallocation, but it's good practice to monitor for potential memory leaks.
+
+This project demonstrates the use of data structures and algorithms for image processing, specifically focusing on quadtree compression and decompression.
